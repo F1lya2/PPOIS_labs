@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 
 class TuringTape{
 private:
@@ -25,7 +26,30 @@ public:
 };
 
 class TuringProgram{
+public:
+    struct Rule{
+        std::string currentState;
+        char currentSymbol;
+        std::string newState;
+        char newSymbol;
+        char move;
 
+        bool operator==(const Rule& other) const;
+    };
+
+private:
+    std::vector<Rule> rules;
+
+public:
+    TuringProgram() = default;
+
+    void addRule(const Rule& rule);
+    void removeRule(std::size_t index);
+    void clear();
+    const std::vector<Rule>& getRules() const;
+
+    friend std::ostream& operator<<(std::ostream& os, const TuringProgram& program);
+    friend std::istream& operator>>(std::istream& is, TuringProgram& program);
 };
 
 class TuringMachine{
@@ -49,4 +73,8 @@ public:
    void run(bool log = false);
 
    void printState() const;
+
+   void addRule(const TuringProgram::Rule& rule) { program.addRule(rule); }
+   void removeRule(std::size_t index) { program.removeRule(index); }
+   void printRules() const { std::cout << program; }
 };

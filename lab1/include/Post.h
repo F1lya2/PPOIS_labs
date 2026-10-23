@@ -44,12 +44,12 @@ public:
     PostProgram() = default;
 
     void addRule(const Rule& rule);
-    void removeRule(int index);
+    void removeRule(std::size_t index);
     void clear();
     const std::vector<Rule>& getRules() const;
 
-    friend std::ostream& operator<<(std::ostream os, const PostProgram& program);
-    friend std::istream& operator>>(std::istream is, PostProgram& program);
+    friend std::ostream& operator<<(std::ostream& os, const PostProgram& program);
+    friend std::istream& operator>>(std::istream& is, PostProgram& program);
 };
 
 class PostMachine{
@@ -59,8 +59,9 @@ private:
     int carriage; // Позиция каретки
     int state; //Текущее состояние
     bool halted; //Флаг остановки
+    static const int VIEW_RADIUS = 3; //область видимости
 public:
-    PostMachine(): carriage(0), state(0), halted(false){}
+    PostMachine(): carriage(0), state(1), halted(false){}
 
     void operator++();
     void operator--();
@@ -72,4 +73,8 @@ public:
     void run(bool log = false);
 
     void printState() const;
+
+    void addRule(const PostProgram::Rule& rule) { program.addRule(rule); }
+    void removeRule(std::size_t index) { program.removeRule(index); }
+    void printRules() const { std::cout << program; }
 };

@@ -1,0 +1,1 @@
+/usr/bin/c++ --coverage -Wl,--dependency-file=CMakeFiles/lab1_app.dir/link.d CMakeFiles/lab1_app.dir/app/main.cpp.o CMakeFiles/lab1_app.dir/src/Post.cpp.o CMakeFiles/lab1_app.dir/src/Turing.cpp.o -o lab1_app
