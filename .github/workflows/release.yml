@@ -1,0 +1,31 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Скачиваем код
+        uses: actions/checkout@v4
+
+      - name: Устанавливаем зависимости
+        run: sudo apt-get update && sudo apt-get install -y cmake g++
+
+      - name: Конфигурируем CMake (в режиме Release)
+        run: cmake -S lab1 -B lab1/build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Собираем проект
+        run: cmake --build lab1/build
+
+      - name: Создаем релиз и прикрепляем бинарник
+        uses: softprops/action-gh-release@v2
+        with:
+          files: lab1/build/lab1_app
+          generate_release_notes: true
