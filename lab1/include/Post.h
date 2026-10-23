@@ -77,4 +77,7 @@ public:
     void addRule(const PostProgram::Rule& rule) { program.addRule(rule); }
     void removeRule(std::size_t index) { program.removeRule(index); }
     void printRules() const { std::cout << program; }
+
+    int getState() const { return state; }
+    int getCarriage() const { return carriage; }
 };

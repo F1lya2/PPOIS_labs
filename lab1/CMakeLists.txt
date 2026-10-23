@@ -5,14 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options(-Wall -Wextra -Wpedantic)
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    add_compile_options(--coverage)
-    add_link_options(--coverage)
-endif()
-
-# ==========================================
-# СБОРКА ПРИЛОЖЕНИЯ (lab1_app)
-# ==========================================
 add_executable(lab1_app
     app/main.cpp
     src/Post.cpp
@@ -20,26 +12,22 @@ add_executable(lab1_app
 )
 target_include_directories(lab1_app PRIVATE include)
 
-# ==========================================
-# ТЕСТЫ (ПОКА ЗАКОММЕНТИРОВАНО)
-# ==========================================
-# include(FetchContent)
-# FetchContent_Declare(
-#   Catch2
-#   GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-#   GIT_TAG        v3.4.0
-# )
-# FetchContent_MakeAvailable(Catch2)
+include(FetchContent)
+FetchContent_Declare(
+  Catch2
+  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+  GIT_TAG        v3.4.0
+)
+FetchContent_MakeAvailable(Catch2)
 
-# add_executable(lab1_tests
-#     tests/test_main.cpp
-#     tests/test_post.cpp
-#     tests/test_turing.cpp
-#     src/Post.cpp
-#     src/Turing.cpp
-# )
-# target_include_directories(lab1_tests PRIVATE include)
-# target_link_libraries(lab1_tests PRIVATE Catch2::Catch2WithMain)
+add_executable(lab1_tests
+    tests/test_post.cpp
+    tests/test_turing.cpp
+    src/Post.cpp
+    src/Turing.cpp
+)
+target_include_directories(lab1_tests PRIVATE include)
+target_link_libraries(lab1_tests PRIVATE Catch2::Catch2WithMain)
 
-# enable_testing()
-# add_test(NAME AllTests COMMAND lab1_tests)
+enable_testing()
+add_test(NAME AllTests COMMAND lab1_tests)
