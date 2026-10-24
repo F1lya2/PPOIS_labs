@@ -24,7 +24,7 @@
 - `./build/lab1_app tests/test_post.txt -log`
 - `./build/lab1_app tests/test_turing.txt -log`
 
-## О проекте
+## Запуск проекта из любой точки
 - `./lab1_app /home/f1lya2/PPOIS/PPOIS_labs/lab1/tests/test_post.txt -log`
 
 ## Запуск тестов
