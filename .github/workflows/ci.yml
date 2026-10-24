@@ -23,7 +23,7 @@ jobs:
       run: cppcheck --enable=warning,style,performance --error-exitcode=1 --suppress=missingIncludeSystem lab1/src lab1/app lab1/include
 
     - name: Configure CMake (Debug for Coverage)
-      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      run: cmake -S lab1 -B lab1/build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
     - name: Build
       run: cmake --build lab1/build
 
