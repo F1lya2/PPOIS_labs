@@ -12,20 +12,34 @@ jobs:
   build-and-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Скачиваем код
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Устанавливаем зависимости
-        run: sudo apt-get update && sudo apt-get install -y cmake g++
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake g++ gcovr
 
-      - name: Конфигурируем CMake (в режиме Release)
-        run: cmake -S lab1 -B lab1/build -DCMAKE_BUILD_TYPE=Release
+      - name: Configure CMake (Debug for coverage)
+        run: cmake -S lab1 -B lab1/build-test -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
 
-      - name: Собираем проект
-        run: cmake --build lab1/build
+      - name: Build Tests
+        run: cmake --build lab1/build-test
 
-      - name: Создаем релиз и прикрепляем бинарник
+      - name: Run Tests
+        working-directory: lab1/build-test
+        run: ctest --output-on-failure
+
+      - name: Enforce Coverage Threshold (Fail if <90%)
+        working-directory: lab1/build-test
+        run: gcovr -r .. --exclude ".*_deps.*" --exclude ".*tests.*" --fail-under=90
+
+      - name: Configure CMake (Release for Binary)
+        run: cmake -S lab1 -B lab1/build-release -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build Release Binary
+        run: cmake --build lab1/build-release
+
+      - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: lab1/build/lab1_app
+          files: lab1/build-release/lab1_app
           generate_release_notes: true

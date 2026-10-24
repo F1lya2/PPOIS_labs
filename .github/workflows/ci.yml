@@ -11,30 +11,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Скачиваем код из репозитория
+    - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Устанавливаем зависимости (CMake, компилятор, gcovr)
+    - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake g++ gcovr
+        sudo apt-get install -y cmake g++ gcovr cppcheck
 
-    - name: Конфигурируем CMake (с покрытием)
-      run: cmake -S lab1 -B lab1/build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
+    - name: Run Cppcheck (Linter)
+      run: cppcheck --enable=warning,style,performance --error-exitcode=1 --suppress=missingIncludeSystem lab1/src lab1/app lab1/include
 
-    - name: Собираем проект
+    - name: Configure CMake (Debug for Coverage)
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+    - name: Build
       run: cmake --build lab1/build
 
-    - name: Запускаем тесты
+    - name: Run Tests
       working-directory: lab1/build
       run: ctest --output-on-failure
 
-    - name: Считаем покрытие (gcovr)
+    - name: Check Coverage (Must be >90%)
       working-directory: lab1/build
       run: |
-        echo "### Отчет о покрытии кода (gcovr)" >> $GITHUB_STEP_SUMMARY
+        gcovr -r .. --exclude ".*_deps.*" --exclude ".*tests.*" --fail-under=90
+        echo "### 📊 Отчет о покрытии кода" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo '```text' >> $GITHUB_STEP_SUMMARY
-        # gcovr автоматически найдет только запущенные файлы (.gcda) и посчитает правильные проценты
-        gcovr -r .. --exclude '.*_deps.*' --exclude '.*tests.*' >> $GITHUB_STEP_SUMMARY
+        gcovr -r .. --exclude ".*_deps.*" --exclude ".*tests.*" >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
