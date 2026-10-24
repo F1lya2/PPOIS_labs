@@ -31,3 +31,10 @@ target_link_libraries(lab1_tests PRIVATE Catch2::Catch2WithMain)
 
 enable_testing()
 add_test(NAME AllTests COMMAND lab1_tests)
+
+option(ENABLE_COVERAGE "Enable coverage reporting" OFF)
+
+if(ENABLE_COVERAGE)
+    target_compile_options(lab1_tests PRIVATE --coverage)
+    target_link_options(lab1_tests PRIVATE --coverage)
+endif()

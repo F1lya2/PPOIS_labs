@@ -14,11 +14,13 @@ jobs:
     - name: Скачиваем код из репозитория
       uses: actions/checkout@v4
 
-    - name: Устанавливаем зависимости (CMake, компилятор)
-      run: sudo apt-get update && sudo apt-get install -y cmake g++
+    - name: Устанавливаем зависимости (CMake, компилятор, lcov)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake g++ lcov
 
-    - name: Конфигурируем CMake
-      run: cmake -S lab1 -B lab1/build
+    - name: Конфигурируем CMake (с покрытием)
+      run: cmake -S lab1 -B lab1/build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
 
     - name: Собираем проект
       run: cmake --build lab1/build
@@ -26,3 +28,18 @@ jobs:
     - name: Запускаем тесты
       working-directory: lab1/build
       run: ctest --output-on-failure
+
+    - name: Считаем покрытие (lcov)
+      working-directory: lab1/build
+      run: |
+        lcov --capture --directory . --output-file coverage.info --ignore-errors mismatch,gcov,source
+
+        lcov --remove coverage.info '/usr/*' '*/_deps/*' --output-file coverage.info
+
+        lcov --list coverage.info
+
+        echo "### 📊 Отчет о покрытии кода" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo '```text' >> $GITHUB_STEP_SUMMARY
+        lcov --list coverage.info >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
