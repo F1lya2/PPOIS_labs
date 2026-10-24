@@ -17,17 +17,17 @@
 -cmake -S . -B build
 -cmake --build build
 
-##Запуск программы
+## О проекте
 ./build/lab1_app tests/test_post.txt -log
 ./build/lab1_app tests/test_turing.txt -log
 
-###Запуск из любого места
+## О проекте
 ./lab1_app /home/f1lya2/PPOIS/PPOIS_labs/lab1/tests/test_post.txt -log
 
-##Запуск тестов
+## Запуск тестов
 ./build/lab1_tests
 
-##Проверка покрытия кода (локально)
+## Проверка покрытия кода (локально)
 
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
 cmake --build build
