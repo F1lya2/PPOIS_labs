@@ -29,15 +29,17 @@ jobs:
       working-directory: lab1/build
       run: ctest --output-on-failure
 
-    - name: Считаем покрытие (lcov)
+    -     - name: Считаем покрытие (lcov)
       working-directory: lab1/build
       run: |
-        lcov --capture --directory . --output-file coverage.info --ignore-errors mismatch,gcov,source
 
-        lcov --remove coverage.info '/usr/*' '*/_deps/*' --output-file coverage.info
+        lcov --capture --directory CMakeFiles/lab1_tests.dir --output-file coverage.info --ignore-errors mismatch,gcov,source
+
+
+        lcov --remove coverage.info '/usr/*' '*/_deps/*' '*/tests/*' --output-file coverage.info
+
 
         lcov --list coverage.info
-
         echo "### 📊 Отчет о покрытии кода" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo '```text' >> $GITHUB_STEP_SUMMARY
