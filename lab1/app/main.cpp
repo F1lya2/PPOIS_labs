@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
                     break;
                 }
                 case 2: {
-                    PostProgram::Rule r;
+                    PostProgram::Rule r{};
                     std::cout << "Введите: состояние символ -> новое_состояние новый_символ R/L/N\n";
                     std::string arrow;
                     if (std::cin >> r.currentState >> r.currentSymbol >> arrow >> r.newState >> r.newSymbol >> r.move) {
@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
                     break;
                 }
                 case 2: {
-                    TuringProgram::Rule r;
+                    TuringProgram::Rule r{};
                     std::cout << "Введите: состояние символ -> новое_состояние новый_символ R/L/S\n";
                     std::string arrow;
                     if (std::cin >> r.currentState >> r.currentSymbol >> arrow >> r.newState >> r.newSymbol >> r.move) {

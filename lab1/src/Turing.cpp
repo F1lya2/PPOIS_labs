@@ -88,7 +88,7 @@ std::istream& operator>>(std::istream& is, TuringProgram& program){
         if(line.empty() || line[0] == '#') continue;
 
         std::istringstream iss(line);
-        TuringProgram::Rule rule;
+        TuringProgram::Rule rule{};
         std::string arrow;
 
         if(iss >> rule.currentState >> rule.currentSymbol >> arrow >> rule.newState >> rule.newSymbol >> rule.move){

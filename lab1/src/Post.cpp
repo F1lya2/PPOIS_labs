@@ -89,7 +89,7 @@ std::istream& operator>>(std::istream& is, PostProgram& program) {
         if (line.empty() || line[0] == '#') continue;
 
         std::istringstream iss(line);
-        PostProgram::Rule rule;
+        PostProgram::Rule rule{};
         std::string arrow;
 
         if (iss >> rule.currentState >> rule.currentSymbol >> arrow
