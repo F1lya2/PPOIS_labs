@@ -38,9 +38,7 @@
 - `./build/lab1_tests`
 
 - `cd build`
-- `lcov --capture --directory . --output-file coverage.info`
-- `lcov --remove coverage.info '/usr/*' '*/_deps/*' '*/tests/*' --output-file coverage.info`
-- `lcov --list coverage.info`
+
 
 ## Генерация документации
 - `doxygen Doxyfile`
