@@ -30,7 +30,7 @@ jobs:
 
       - name: Enforce Coverage Threshold (Fail if <90%)
         working-directory: lab1/build-test
-        run: gcovr -r .. --exclude ".*_deps.*" --exclude ".*tests.*" --fail-under=90
+        run: gcovr -r .. --exclude ".*_deps.*" --exclude ".*tests.*" --fail-under-line 90
 
       - name: Configure CMake (Release for Binary)
         run: cmake -S lab1 -B lab1/build-release -DCMAKE_BUILD_TYPE=Release
