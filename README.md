@@ -14,38 +14,38 @@
 
 ## Сборка проекта
 Выполните следующие команды из папки `lab1`:
--cmake -S . -B build
--cmake --build build
+- `cmake -S . -B build`
+- `cmake --build build`
 
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
-cmake --build build --target coverage
+- `cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON`
+- `cmake --build build --target coverage`
 
 ## Запуск проекта
-./build/lab1_app tests/test_post.txt -log
-./build/lab1_app tests/test_turing.txt -log
+- `./build/lab1_app tests/test_post.txt -log`
+- `./build/lab1_app tests/test_turing.txt -log`
 
 ## О проекте
-./lab1_app /home/f1lya2/PPOIS/PPOIS_labs/lab1/tests/test_post.txt -log
+- `./lab1_app /home/f1lya2/PPOIS/PPOIS_labs/lab1/tests/test_post.txt -log`
 
 ## Запуск тестов
-./build/lab1_tests
+- `./build/lab1_tests`
 
 ## Проверка покрытия кода (локально)
 
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
-cmake --build build
+- `cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON`
+- `cmake --build build`
 
-./build/lab1_tests
+- `./build/lab1_tests`
 
-cd build
-lcov --capture --directory . --output-file coverage.info
-lcov --remove coverage.info '/usr/*' '*/_deps/*' '*/tests/*' --output-file coverage.info
-lcov --list coverage.info
+- `cd build`
+- `lcov --capture --directory . --output-file coverage.info`
+- `lcov --remove coverage.info '/usr/*' '*/_deps/*' '*/tests/*' --output-file coverage.info`
+- `lcov --list coverage.info`
 
 ## Генерация документации
-doxygen Doxyfile
-xdg-open docs/html/index.html
+- `doxygen Doxyfile`
+- `xdg-open docs/html/index.html`
 
 ## Принятие файла исполняемым
-chmod +x lab1_app
+- `chmod +x lab1_app`
 
