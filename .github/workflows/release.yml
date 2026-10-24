@@ -19,7 +19,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y cmake g++ gcovr
 
       - name: Configure CMake (Debug for coverage)
-        run: cmake -S lab1 -B lab1/build-test -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
+        run: cmake -S lab1 -B lab1/build-test -DENABLE_COVERAGE=ON
 
       - name: Build Tests
         run: cmake --build lab1/build-test

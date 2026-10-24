@@ -23,7 +23,7 @@ jobs:
       run: cppcheck --enable=warning,style,performance --error-exitcode=1 --suppress=missingIncludeSystem lab1/src lab1/app lab1/include
 
     - name: Configure CMake (Debug for Coverage)
-      run: cmake -S lab1 -B lab1/build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
+      run: cmake -S lab1 -B lab1/build -DENABLE_COVERAGE=ON
 
     - name: Build
       run: cmake --build lab1/build
@@ -35,7 +35,6 @@ jobs:
     - name: Check Coverage (Must be >90%)
       working-directory: lab1/build
       run: |
-        # Исправленный флаг: --fail-under-line 90
         gcovr -r .. --exclude ".*_deps.*" --exclude ".*tests.*" --fail-under-line 90
 
         echo "### 📊 Отчет о покрытии кода" >> $GITHUB_STEP_SUMMARY
