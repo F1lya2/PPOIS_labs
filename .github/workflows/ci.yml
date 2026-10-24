@@ -14,10 +14,10 @@ jobs:
     - name: Скачиваем код из репозитория
       uses: actions/checkout@v4
 
-    - name: Устанавливаем зависимости (CMake, компилятор, lcov)
+    - name: Устанавливаем зависимости (CMake, компилятор, gcovr)
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake g++ lcov
+        sudo apt-get install -y cmake g++ gcovr
 
     - name: Конфигурируем CMake (с покрытием)
       run: cmake -S lab1 -B lab1/build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
@@ -29,14 +29,12 @@ jobs:
       working-directory: lab1/build
       run: ctest --output-on-failure
 
-    - name: Считаем покрытие (lcov)
+    - name: Считаем покрытие (gcovr)
       working-directory: lab1/build
       run: |
-        lcov --capture --directory CMakeFiles/lab1_tests.dir --output-file coverage.info --ignore-errors mismatch,gcov,source
-        lcov --remove coverage.info '/usr/*' '*/_deps/*' '*/tests/*' --output-file coverage.info
-        lcov --list coverage.info
-        echo "### 📊 Отчет о покрытии кода" >> $GITHUB_STEP_SUMMARY
+        echo "### Отчет о покрытии кода (gcovr)" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo '```text' >> $GITHUB_STEP_SUMMARY
-        lcov --list coverage.info >> $GITHUB_STEP_SUMMARY
+        # gcovr автоматически найдет только запущенные файлы (.gcda) и посчитает правильные проценты
+        gcovr -r .. --exclude '.*_deps.*' --exclude '.*tests.*' >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
