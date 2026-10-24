@@ -1,5 +1,6 @@
 #include "../include/Turing.h"
 #include <sstream>
+#include <algorithm>
 
 constexpr int VIEW_RADIUS = 4;
 
@@ -115,25 +116,23 @@ void TuringMachine::loadProgram(std::istream& is){
     is >> program;
 }
 
-void TuringMachine::step(){
-    if(halted) return;
+void TuringMachine::step() {
+    if (halted) return;
 
     char currentChar = tape.getCell(carriage);
-    bool ruleFound = false;
 
-    for(const auto& rule : program.getRules()){
-        if(rule.currentState == state && rule.currentSymbol == currentChar){
-            tape.setCell(carriage, rule.newSymbol);
-            state = rule.newState;
+    auto it = std::find_if(program.getRules().begin(), program.getRules().end(),
+        [&](const TuringProgram::Rule& rule) {
+            return rule.currentState == state && rule.currentSymbol == currentChar;
+        });
 
-            if(rule.move == 'R') {++(*this);}
-            else if (rule.move == 'L') { --(*this); }
-            else if (rule.move == 'S' || rule.move == 'N') { }
-            ruleFound = true;
-            break;
-        }
-    }
-    if(!ruleFound){
+    if (it != program.getRules().end()) {
+        tape.setCell(carriage, it->newSymbol);
+        state = it->newState;
+        if (it->move == 'R') { ++(*this); }
+        else if (it->move == 'L') { --(*this); }
+        else if (it->move == 'S' || it->move == 'N') { /* stay */ }
+    } else {
         halted = true;
     }
 }

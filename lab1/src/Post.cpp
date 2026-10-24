@@ -1,5 +1,6 @@
 #include "../include/Post.h"
 #include <sstream>
+#include <algorithm>
 
 PostTape::PostTape(char blankSymbol) : blank(blankSymbol) {}
 
@@ -117,31 +118,22 @@ void PostMachine::loadProgram(std::istream& is) {
     is >> program; // Просто вызываем нашу перегрузку оператора!
 }
 
-void PostMachine::step(){
-    if(halted) return;
+void PostMachine::step() {
+    if (halted) return;
 
     char currentChar = tape.getCell(carriage);
-    bool ruleFound = false;
 
-    for(const auto& rule : program.getRules()){
-        if(rule.currentState == state && rule.currentSymbol == currentChar){
-            tape.setCell(carriage, rule.newSymbol);
-            state = rule.newState;
+    auto it = std::find_if(program.getRules().begin(), program.getRules().end(),
+        [&](const PostProgram::Rule& rule) {
+            return rule.currentState == state && rule.currentSymbol == currentChar;
+        });
 
-            if(rule.move == 'R') {
-                ++(*this);
-            }
-            else if(rule.move == 'L'){
-                --(*this);
-            }
-            else if(rule.move == 'N'){}
-
-            ruleFound = true;
-            break;
-        }
-    }
-
-    if(!ruleFound){
+    if (it != program.getRules().end()) {
+        tape.setCell(carriage, it->newSymbol);
+        state = it->newState;
+        if (it->move == 'R') { ++(*this); }
+        else if (it->move == 'L') { --(*this); }
+    } else {
         halted = true;
     }
 }
