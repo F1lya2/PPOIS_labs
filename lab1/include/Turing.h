@@ -62,11 +62,11 @@ public:
      * @brief Структура одного правила Машины Тьюринга.
      */
     struct Rule {
-        std::string currentState; ///< Текущее состояние
-        char currentSymbol;       ///< Текущий символ на ленте
-        std::string newState;     ///< Новое состояние
-        char newSymbol;           ///< Новый символ для записи
-        char move;                ///< Движение: 'L', 'R', 'S' (Stay)
+        std::string currentState = "";
+        char currentSymbol = '_';
+        std::string newState = "";
+        char newSymbol = '_';
+        char move = 'S';
 
         bool operator==(const Rule& other) const;
     };
@@ -178,7 +178,7 @@ public:
      * @brief Возвращает текущее состояние машины.
      * @return Текущее состояние.
      */
-    std::string getState() const { return state; }
+    const std::string& getState() const { return state; }
 
     /**
      * @brief Возвращает текущую позицию каретки.
