@@ -1,0 +1,44 @@
+name: C++ CI Pipeline
+
+on:
+  push:
+    branches: [ "main", "feature-lab1" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake g++ gcovr cppcheck
+
+    - name: Run Cppcheck (Linter)
+      run: cppcheck --enable=warning,style,performance --error-exitcode=1 --suppress=missingIncludeSystem lab1/src lab1/app lab1/include
+
+    - name: Configure CMake (Debug for Coverage)
+      run: cmake -S lab1 -B lab1/build -DENABLE_COVERAGE=ON
+
+    - name: Build
+      run: cmake --build lab1/build
+
+    - name: Run Tests
+      working-directory: lab1/build
+      run: ctest --output-on-failure
+
+    - name: Check Coverage (Must be >90%)
+      working-directory: lab1/build
+      run: |
+        gcovr -r .. --exclude ".*_deps.*" --exclude ".*tests.*" --fail-under-line 90
+
+        echo "### 📊 Отчет о покрытии кода" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo '```text' >> $GITHUB_STEP_SUMMARY
+        gcovr -r .. --exclude ".*_deps.*" --exclude ".*tests.*" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
